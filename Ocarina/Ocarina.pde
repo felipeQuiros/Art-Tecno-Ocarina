@@ -79,6 +79,8 @@ int actionCount=0;
 PImage star;
 boolean detect;
 
+PImage bicepDer;
+
 void setup()
 {
   size(800, 600);  // strange, get drawing error in the cameraFrustum if i use P3D, in opengl there is no problem
@@ -184,6 +186,8 @@ void setup()
   poseAnimal[13][1]=414;
 
   star=loadImage("estrella.png");
+  
+  bicepDer=loadImage("PngCortados/BicepDerecho.png");
 }
 
 void draw()
@@ -206,7 +210,7 @@ void draw()
 
   // draw the skeleton if it's available
   int[] userList = context.getUsers();
-  for (int i=0; i<userList.length && i<1;i++)
+  for (int i=userList.length-1; i<userList.length && i>=0 ;i++)
   {
     if (context.isTrackingSkeleton(userList[i])) {
       setVectors(userList[i]);//intento
@@ -247,7 +251,15 @@ void draw()
     for (int i=0;i<primeraPose.length;i++) {
       ellipse(primeraPose[i][0], primeraPose[i][1], 15, 15);
     }
-
+    
+    
+    pushMatrix();
+    translate(xMap(hombroDer.x),yMap(hombroDer.y));
+    rotate(-PI/2-(new PVector(codoDer.x-hombroDer.x,codoDer.y-hombroDer.y).heading()));
+    image(bicepDer,-40,-40);
+    popMatrix();
+    
+    
     detect=true;
 
     for (int i=0;i<vectores.size();i++) {
@@ -353,6 +365,13 @@ void draw()
     gestoCnt=0;
     gesto="";
   }
+}
+
+public float xMap(float x){
+  return 400+map(x, 900, -900, 200, -200)+(centroide.x*0.3);
+}
+public float yMap(float y){
+  return 250+map(y, 900, -900, -200, 200);
 }
 
 // draw the skeleton with the selected joints
@@ -469,7 +488,7 @@ public void punticos() {
 
   for (int i=0;i<vectores.size();i++) {
     PVector tmp=vectores.get(i);
-    point(map(tmp.x, 900, -900, 200, -200), map(tmp.y, 900, -900, -200, 200));
+    point(map(tmp.x, 900, -900, 250, -250), map(tmp.y, 900, -900, -250, 250));
   }
   point(0, 0);
   strokeWeight(1);
