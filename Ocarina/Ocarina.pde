@@ -6,10 +6,11 @@ import ddf.minim.effects.*;
 import processing.opengl.*;
 import java.net.*;
 import java.io.*;
+
 Minim minim;
 AudioInput inp;
-AudioSample blender, coffee, cooker, microwave, shower, stove, tv;
-
+AudioPlayer forestSoft;
+AudioPlayer ocarina;
 /* --------------------------------------------------------------------------
  * SimpleOpenNI User3d Test
  * --------------------------------------------------------------------------
@@ -80,6 +81,36 @@ PImage star;
 boolean detect;
 
 PImage bicepDer;
+PImage bicepIzq;
+PImage antebrazoDer;
+PImage BG1;
+PImage tronco;
+PImage cintura;
+PImage musloDer;
+PImage musloIzq;
+PImage ritual;
+PImage ritualFilter;
+PImage dios;
+PImage luna;
+PImage pto;
+PImage fin;
+PImage finFiltro;
+
+int alphaRitualFilter=255;
+int yFilter=0;
+
+public void init() {
+  /// to make a frame not displayable, you can 
+  // use frame.removeNotify() 
+  frame.removeNotify(); 
+
+  frame.setUndecorated(true); 
+
+  // addNotify, here i am not sure if you have  
+  // to add notify again.   
+  frame.addNotify(); 
+  super.init();
+}
 
 void setup()
 {
@@ -87,7 +118,9 @@ void setup()
   context = new SimpleOpenNI(this);
 
   // Minim
-  minim = new Minim(this); 
+  minim = new Minim(this);
+  forestSoft=minim.loadFile("sonidos/forestSoft.mp3");
+  ocarina=minim.loadFile("sonidos/Ocarina1.mp3");
 
   try {
     oscP5 = new OscP5(this, 9000);
@@ -128,70 +161,84 @@ void setup()
   vectores.add(pieDer);
   vectores.add(pieIzq);
 
-  primeraPose[0][0]= 490;
-  primeraPose[0][1]= 322;
-  primeraPose[1][0]= 309;
-  primeraPose[1][1]= 316;
-  primeraPose[2][0]= 475;
-  primeraPose[2][1]= 260;
-  primeraPose[3][0]= 331;
-  primeraPose[3][1]= 251;
-  primeraPose[4][0]= 439;
-  primeraPose[4][1]= 202;
-  primeraPose[5][0]= 359;
-  primeraPose[5][1]= 202;
-  primeraPose[6][0]= 398;
-  primeraPose[6][1]= 156;
-  primeraPose[7][0]= 399;
-  primeraPose[7][1]= 202;
-  primeraPose[8][0]= 422;
-  primeraPose[8][1]= 297;
-  primeraPose[9][0]= 378;
-  primeraPose[9][1]= 297;
-  primeraPose[10][0]= 431;
-  primeraPose[10][1]= 393;
-  primeraPose[11][0]= 362;
-  primeraPose[11][1]= 392;
-  primeraPose[12][0]= 448;
-  primeraPose[12][1]= 480;
-  primeraPose[13][0]= 349;
-  primeraPose[13][1]= 478;
-  poseAnimal[0][0]=532;
-  poseAnimal[0][1]=206;
-  poseAnimal[1][0]=374;
-  poseAnimal[1][1]=112;
-  poseAnimal[2][0]=494;
-  poseAnimal[2][1]=233;
-  poseAnimal[3][0]=338;
-  poseAnimal[3][1]=149;
-  poseAnimal[4][0]=442;
-  poseAnimal[4][1]=208;
-  poseAnimal[5][0]=372;
-  poseAnimal[5][1]=196;
-  poseAnimal[6][0]=415;
-  poseAnimal[6][1]=155;
-  poseAnimal[7][0]=407;
-  poseAnimal[7][1]=202;
-  poseAnimal[8][0]=413;
-  poseAnimal[8][1]=300;
-  poseAnimal[9][0]=371;
-  poseAnimal[9][1]=294;
-  poseAnimal[10][0]=405;
-  poseAnimal[10][1]=401;
-  poseAnimal[11][0]=452;
-  poseAnimal[11][1]=321;
-  poseAnimal[12][0]=395;
-  poseAnimal[12][1]=473;
-  poseAnimal[13][0]=483;
-  poseAnimal[13][1]=414;
+  primeraPose[0][0]=470;
+  primeraPose[0][1]=355;
+  primeraPose[1][0]=324;
+  primeraPose[1][1]=360;
+  primeraPose[2][0]=460;
+  primeraPose[2][1]=292;
+  primeraPose[3][0]=340;
+  primeraPose[3][1]=290;
+  primeraPose[4][0]=440;
+  primeraPose[4][1]=224;
+  primeraPose[5][0]=361;
+  primeraPose[5][1]=223;
+  primeraPose[6][0]=402;
+  primeraPose[6][1]=174;
+  primeraPose[7][0]=401;
+  primeraPose[7][1]=224;
+  primeraPose[8][0]=422;
+  primeraPose[8][1]=326;
+  primeraPose[9][0]=375;
+  primeraPose[9][1]=325;
+  primeraPose[10][0]=434;
+  primeraPose[10][1]=426;
+  primeraPose[11][0]=358;
+  primeraPose[11][1]=424;
+  primeraPose[12][0]=456;
+  primeraPose[12][1]=519;
+  primeraPose[13][0]=343;
+  primeraPose[13][1]=519;
 
+  poseAnimal[0][0]=343;
+  poseAnimal[0][1]=222;
+  poseAnimal[1][0]=341;
+  poseAnimal[1][1]=266;
+  poseAnimal[2][0]=403;
+  poseAnimal[2][1]=242;
+  poseAnimal[3][0]=383;
+  poseAnimal[3][1]=280;
+  poseAnimal[4][0]=445;
+  poseAnimal[4][1]=223;
+  poseAnimal[5][0]=400;
+  poseAnimal[5][1]=227;
+  poseAnimal[6][0]=418;
+  poseAnimal[6][1]=179;
+  poseAnimal[7][0]=422;
+  poseAnimal[7][1]=225;
+  poseAnimal[8][0]=442;
+  poseAnimal[8][1]=323;
+  poseAnimal[9][0]=416;
+  poseAnimal[9][1]=325;
+  poseAnimal[10][0]=414;
+  poseAnimal[10][1]=417;
+  poseAnimal[11][0]=347;
+  poseAnimal[11][1]=376;
+  poseAnimal[12][0]=431;
+  poseAnimal[12][1]=476;
+  poseAnimal[13][0]=359;
+  poseAnimal[13][1]=479;
   star=loadImage("estrella.png");
-  
-  bicepDer=loadImage("PngCortados/BicepDerecho.png");
+
+  bicepDer=loadImage("PngCortados/BrazoDerechoComplete.png");
+  BG1=loadImage("PngCortados/BG.png");
+  bicepIzq=loadImage("PngCortados/BrazoIzquierdoComplete.png");
+  tronco=loadImage("PngCortados/Tronco.png");
+  cintura=loadImage("PngCortados/Cadera.png");
+  musloDer=loadImage("PngCortados/PiernaDerechaComplete.png");
+  musloIzq=loadImage("PngCortados/PiernaIzquierdaComplete.png");
+
+  ritual=loadImage("Ritual.png");
+  ritualFilter=loadImage("FiltroRitual.png");
+  luna=loadImage("Acto2NocheJaguarSin.png");
+  pto=loadImage("PtoNegro.png");
+  fin=loadImage("ActoFinal.png");
+  finFiltro=loadImage("ActoFinalFiltro.png");
 }
 
 void draw()
 {
+  frame.setLocation(displayWidth, 0);
   // update the cam
   context.update();
 
@@ -208,15 +255,7 @@ void draw()
 
   stroke(100); 
 
-  // draw the skeleton if it's available
-  int[] userList = context.getUsers();
-  for (int i=userList.length-1; i<userList.length && i>=0 ;i++)
-  {
-    if (context.isTrackingSkeleton(userList[i])) {
-      setVectors(userList[i]);//intento
-      punticos();
-    }
-  }    
+  // draw the skeleton if it's available  
 
   // draw the kinect cam
   //context.drawCamFrustum();
@@ -226,14 +265,19 @@ void draw()
   textSize(30);
   //text("angle: "+yHombroD, 20, 105);
 
-  text("Status: "+lugar, 400, 30);
+  //text("Status: "+lugar, 400, 30);
 
   switch(lugar) {
 
   case 0:
     //reposo
+    tint(255, 128);
+
+    image(ritual, 0, 0, 800, 600);
 
     //musica ambiente
+    forestSoft.play();
+    ocarina.play();
 
     //gráfico
 
@@ -242,46 +286,99 @@ void draw()
 
   case 1:
     //ACTO 1
-
+ocarina.pause();
 
       //pintar temporalmente los dots del chaman
+
+    tint(255, 128);
+    image(BG1, 0, 0);
+
+    int[] userList = context.getUsers();
+    for (int i=userList.length-1; i<userList.length && i>=0 ;i++)
+    {
+      if (context.isTrackingSkeleton(userList[i])) {
+        setVectors(userList[i]);//intento
+        //punticos();
+      }
+    }  
+
 
     noFill();
     ellipseMode(CENTER);
     for (int i=0;i<primeraPose.length;i++) {
-      ellipse(primeraPose[i][0], primeraPose[i][1], 15, 15);
+      // ellipse(primeraPose[i][0], primeraPose[i][1], 15, 15);
     }
-    
-    
+
+    //BICEP DERECHO
     pushMatrix();
-    translate(xMap(hombroDer.x),yMap(hombroDer.y));
-    rotate(-PI/2-(new PVector(codoDer.x-hombroDer.x,codoDer.y-hombroDer.y).heading()));
-    image(bicepDer,-40,-40);
+    translate(xMap(hombroDer.x), yMap(hombroDer.y));
+    rotate(-PI/2-(new PVector(codoDer.x-hombroDer.x, codoDer.y-hombroDer.y).heading())+radians(15));
+    image(bicepDer, -15, -25);
     popMatrix();
-    
-    
-    detect=true;
 
-    for (int i=0;i<vectores.size();i++) {
-      PVector tmp= new PVector(vectores.get(i).x, vectores.get(i).y);
-      float xx=400+map(tmp.x, 900, -900, 200, -200);
-      float yy=250+map(tmp.y, 900, -900, -200, 200);
+    //BICEP IZQUIERDO
+    pushMatrix();
+    translate(xMap(hombroIzq.x), yMap(hombroIzq.y));
+    rotate(-PI/2-(new PVector(codoIzq.x-hombroIzq.x, codoIzq.y-hombroIzq.y).heading())-radians(15));
+    image(bicepIzq, -55, -25);
+    popMatrix();
 
-      if (abs(dist(xx, yy, primeraPose[i][0], primeraPose[i][1]))>15) {
-        detect=false;
-      }
-    }
+    //PIERNA IZQUIERDA
+    pushMatrix();
+    translate(xMap(caderaIzq.x), yMap(caderaIzq.y));
+    rotate(-PI/2-(new PVector(rodillaIzq.x-caderaIzq.x, rodillaIzq.y-caderaIzq.y).heading())-radians(5));
+    image(musloIzq, -40, 10);
+    popMatrix();
 
-    if (detect) {
+    //PIERNA DERECHA
+    pushMatrix();
+    translate(xMap(caderaDer.x), yMap(caderaDer.y));
+    rotate(-PI/2-(new PVector(rodillaDer.x-caderaDer.x, rodillaDer.y-caderaDer.y).heading())+radians(5));
+    image(musloDer, -25, 10);
+    popMatrix();
+
+    //CUERPO
+    pushMatrix();
+    translate(xMap(cuello.x), yMap(cuello.y));
+    image(tronco, -tronco.width/2, -60);
+    image(cintura, -cintura.width/2, 90);
+    popMatrix();
+
+
+    if (abs((xMap(centroide.x)-413))<3 &&
+      abs(new PVector(codoIzq.x-hombroIzq.x, codoIzq.y-hombroIzq.y).heading()-(-1.7899449))<0.2 &&
+      abs(new PVector(codoDer.x-hombroDer.x, codoDer.y-hombroDer.y).heading()-(-1.3536386))<0.2 &&
+      abs(new PVector(rodillaIzq.x-caderaIzq.x, rodillaIzq.y-caderaIzq.y).heading()-(-1.671257))<0.2 &&
+      abs(new PVector(rodillaDer.x-caderaDer.x, rodillaDer.y-caderaDer.y).heading()-(-1.4087418))<0.2)  
+    {
+      println("siiii");
       lugar=2;
     }
+
 
     break;
 
   case 2:
 
+    image(ritual, 0, 0, 800, 600);
 
-    if ((pitchPierna)<0.2) {
+    tint(255, alphaRitualFilter);
+    image(ritualFilter, 0, 0);
+
+    if (alphaRitualFilter>30) {
+      alphaRitualFilter-=5;
+    }
+
+    userList = context.getUsers();
+    for (int i=userList.length-1; i<userList.length && i>=0 ;i++)
+    {
+      if (context.isTrackingSkeleton(userList[i])) {
+        setVectors(userList[i]);//intento
+        //punticos();
+      }
+    } 
+
+    if ((pitchPierna)<0.6) {
       print("está arrodillado"+frameCount);
 
       //codos más arriba de hombro
@@ -291,7 +388,7 @@ void draw()
         codoIzq.y>hombroIzq.y &&
         manoIzq.z>codoIzq.z &&
         manoDer.z>codoDer.z &&
-        abs(dist(manoDer.x, manoDer.y, manoIzq.x, manoIzq.y))<120) {
+        abs(dist(manoDer.x, manoDer.y, manoIzq.x, manoIzq.y))<180) {
 
         println(", y en posición  "+abs(dist(manoDer.x, manoDer.y, manoIzq.x, manoIzq.y)));
         actionCount++;
@@ -310,20 +407,30 @@ void draw()
 
   case 3:
 
+    tint(255, 255);
+    image(luna, 0, 0, 800, 600);
+
     noFill();
-    ellipseMode(CENTER);
+    imageMode(CENTER);
     for (int i=0;i<poseAnimal.length;i++) {
-      image(star, poseAnimal[i][0], poseAnimal[i][1]);
+      image(pto, poseAnimal[i][0], poseAnimal[i][1]);
+    }
+    imageMode(CORNER);
+    userList = context.getUsers();
+    for (int i=userList.length-1; i<userList.length && i>=0 ;i++)
+    {
+      if (context.isTrackingSkeleton(userList[i])) {
+        setVectors(userList[i]);//intento
+        punticosStar();
+      }
     }
 
     detect=true;
 
     for (int i=0;i<vectores.size();i++) {
       PVector tmp= new PVector(vectores.get(i).x, vectores.get(i).y);
-      float xx=400+map(tmp.x, 900, -900, 200, -200);
-      float yy=250+map(tmp.y, 900, -900, -200, 200);
 
-      if (abs(dist(xx, yy, primeraPose[i][0], primeraPose[i][1]))>15) {
+      if (abs(dist(xMap(tmp.x), yMap(tmp.y), poseAnimal[i][0], poseAnimal[i][1]))>20) {
         detect=false;
       }
     }
@@ -336,17 +443,42 @@ void draw()
 
   case 4:
 
+    tint(255, 128);
+    image(fin, 0, -300);
+    image(finFiltro, 0, yFilter);
+
+    userList = context.getUsers();
+    for (int i=userList.length-1; i<userList.length && i>=0 ;i++)
+    {
+      if (context.isTrackingSkeleton(userList[i])) {
+        setVectors(userList[i]);//intento
+       // punticos();
+      }
+    } 
+
+
     float anguloDer=degrees(PVector.angleBetween(new PVector(hombroDer.x-codoDer.x, hombroDer.y-codoDer.y, hombroDer.z-codoDer.z), new PVector(manoDer.x-codoDer.x, manoDer.y-codoDer.y, manoDer.z-codoDer.z)));
     float anguloIzq=degrees(PVector.angleBetween(new PVector(hombroIzq.x-codoIzq.x, hombroIzq.y-codoIzq.y, hombroIzq.z-codoIzq.z), new PVector(manoIzq.x-codoIzq.x, manoIzq.y-codoIzq.y, manoIzq.z-codoIzq.z)));
 
-    if ((pitchPierna)<0.2 &&
-      abs(dist(manoDer.x, manoDer.y, manoIzq.x, manoIzq.y))<120 &&
-      codoDer.y<hombroDer.y &&
-      codoIzq.y<hombroIzq.y &&
-      abs(anguloDer-45)<10 &&
-      abs(anguloIzq-45)<10) {
-        
-        println("COLOMBIAAA DIOS MIOOO GOOOOLL !!!");
+    println("anguloDer: "+anguloDer+"  anguloIzq: "+anguloIzq);
+
+    if ((pitchPierna)<0.6 &&
+      abs(dist(manoDer.x, manoDer.y, manoIzq.x, manoIzq.y))<190 &&
+      abs(anguloDer-45)<30 &&
+      abs(anguloIzq-45)<30) {
+
+      println("COLOMBIAAA DIOS MIOOO GOOOOLL !!!");
+      yFilter+=5;
+      
+      ocarina.play();
+      
+      if (yFilter>600)
+        exit();
+    }
+    else {
+      if (yFilter>=0) 
+        yFilter-=5;
+        ocarina.pause();
     }
 
     break;
@@ -367,11 +499,11 @@ void draw()
   }
 }
 
-public float xMap(float x){
+public float xMap(float x) {
   return 400+map(x, 900, -900, 200, -200)+(centroide.x*0.3);
 }
-public float yMap(float y){
-  return 250+map(y, 900, -900, -200, 200);
+public float yMap(float y) {
+  return 275+map(y, 900, -900, -200, 200);
 }
 
 // draw the skeleton with the selected joints
@@ -482,13 +614,13 @@ public void punticos() {
 
   pushMatrix();
 
-  translate((centroide.x*0.3)+400, 250);
+  translate((centroide.x*0.3)+400, 275);
   strokeWeight(10);
   stroke(255);
 
   for (int i=0;i<vectores.size();i++) {
     PVector tmp=vectores.get(i);
-    point(map(tmp.x, 900, -900, 250, -250), map(tmp.y, 900, -900, -250, 250));
+    point(map(tmp.x, 900, -900, 200, -200), map(tmp.y, 900, -900, -200, 200));
   }
   point(0, 0);
   strokeWeight(1);
@@ -496,6 +628,20 @@ public void punticos() {
   popMatrix();
 }
 
+public void punticosStar() {
+
+  pushMatrix();
+
+  translate((centroide.x*0.3)+400, 275);
+  imageMode(CENTER);
+  for (int i=0;i<vectores.size();i++) {
+    PVector tmp=vectores.get(i);
+    image(star, map(tmp.x, 900, -900, 200, -200), map(tmp.y, 900, -900, -200, 200));
+  }
+  image(star, 0, 0);
+  imageMode(CORNER);
+  popMatrix();
+}
 //+ + + + + + +++ + + + + + + + + ++ + + +  + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + ++ + + + + + 
 
 // -----------------------------------------------------------------
@@ -511,15 +657,13 @@ void onNewUser(int userId)
   }
   else    
     context.startPoseDetection("Psi", userId);
-
-  if (lugar==0)
-    lugar=1;
 }
 
 void onLostUser(int userId)
 {
   println("onLostUser - userId: " + userId);
   lugar=0;
+  forestSoft.rewind();
 }
 
 void onExitUser(int userId)
@@ -530,6 +674,8 @@ void onExitUser(int userId)
 void onReEnterUser(int userId)
 {
   println("onReEnterUser - userId: " + userId);
+  if (lugar==0)
+    lugar=1;
 }
 
 
@@ -546,6 +692,9 @@ void onEndCalibration(int userId, boolean successfull)
   { 
     println("  User calibrated !!!");
     context.startTrackingSkeleton(userId);
+
+    if (lugar==0)
+      lugar=1;
   } 
   else 
   { 
@@ -575,10 +724,12 @@ public void printPose() {
 
   for (int i=0;i<vectores.size();i++) {
     PVector tmp=vectores.get(i);
-    point(map(tmp.x, 900, -900, 200, -200), map(tmp.y, 900, -900, -200, 200));
-    println("poseAnimal["+i+"][0]="+(400+map(tmp.x, 900, -900, 200, -200))+";");
-    println("poseAnimal["+i+"][1]="+(250+map(tmp.y, 900, -900, -200, 200))+";");
+    println("poseAnimal["+i+"][0]="+((int)(xMap(tmp.x)))+";");
+    println("poseAnimal["+i+"][1]="+((int)(yMap(tmp.y)))+";");
   }
+
+
+  //println("centroide: "+xMap(centroide.x));
 }
 
 // -----------------------------------------------------------------
@@ -608,7 +759,6 @@ void keyPressed()
     }
   }
   else {
-    lugar=Integer.parseInt(String.valueOf(key));
   }
 }
 
